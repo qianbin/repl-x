@@ -52,27 +52,37 @@ export function start(options: REPL.ReplOptions, obj: object) {
     //override eval to support Promise
     const originEval = repl.eval;
     repl.eval = (cmd, ctx, filename, callback) => {
-        if (cmd.trim().length === 0)
-            return callback(null)
-
-        originEval.call(repl, cmd, ctx, filename, async (err: any, result: any) => {
-            if (err)
-                return callback(err)
-
-            let resolvedResult
+        const listeners = repl.listeners('line')
+        listeners.forEach(l => repl.removeListener('line', l as any))
+        async function finish(err: any, result: any) {
             try {
-                resolvedResult = await result
-            } catch (e) {
-                return callback(e)
+                if (err)
+                    return callback(err)
+
+                if (result) {
+                    let resolvedResult
+                    try {
+                        resolvedResult = await result
+                    } catch (e) {
+                        return callback(e)
+                    }
+
+                    if (resolvedResult === VOID)
+                        return callback(null)
+
+                    callback(null, resolvedResult)
+                } else {
+                    if (arguments.length > 1)
+                        callback(err, result)
+                    else
+                        callback(err)
+                }
+            } finally {
+                listeners.forEach(l => repl.addListener('line', l as any))
             }
-
-            if (resolvedResult === VOID)
-                return callback(null)
-
-            callback(null, resolvedResult)
-        })
+        }
+        originEval.call(repl, cmd, ctx, filename, finish)
     }
-
     return repl
 }
 
