@@ -53,7 +53,7 @@ export function start(options: REPL.ReplOptions, ctxObj: () => object) {
             })
         }
     }
-    init()
+    process.nextTick(init)
     repl.on('reset', init)
 
     //override eval to support Promise    
