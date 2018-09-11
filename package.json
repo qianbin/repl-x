@@ -1,22 +1,30 @@
 {
   "name": "repl-x",
-  "version": "0.1.4",
-  "description": "REPL +",
+  "version": "0.2.0",
+  "description": "Promise friendly REPL",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "rm -rf dist/; tsc -p ."
+    "prepare": "rm -rf dist/; tsc -p ."
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/qianbin/repl-x.git"
   },
+  "keywords": [
+    "repl",
+    "promise"
+  ],
   "author": "qianbin",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/qianbin/repl-x.git/issues"
+  },
+  "homepage": "https://github.com/qianbin/repl-x.git#readme",
   "devDependencies": {
-    "@types/node": "^8.0.3",
-    "ts-node": "^3.1.0",
-    "typescript": "^2.3.4"
+    "@types/node": "^10.9.4",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3"
   }
 }
